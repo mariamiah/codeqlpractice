@@ -7,6 +7,7 @@ on:
     - develop
     - test/update  
   workflow_dispatch:
+
 jobs:
   codeql-analysis:
     uses: Kynetixx/codeql-module/.github/workflows/codeql-analysis.yml@main
@@ -25,4 +26,3 @@ jobs:
           else
             echo "Vulnerability score is acceptable: $score."
           fi
-

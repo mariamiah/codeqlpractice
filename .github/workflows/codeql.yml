@@ -26,4 +26,3 @@ jobs:
           else
             echo "Vulnerability score is acceptable: $score."
           fi
-

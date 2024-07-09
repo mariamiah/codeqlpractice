@@ -14,8 +14,8 @@ jobs:
     with:
       project: |
         {
-          "scheme": "Lotto24-staging",
-          "project": "Lotto24.xcodeproj"
+          "scheme": "test-staging",
+          "project": "ExampleSwiftProject.xcodeproj"
         }
 
   check-vulnerabilities:

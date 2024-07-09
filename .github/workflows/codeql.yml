@@ -16,7 +16,7 @@ jobs:
       project: |
         {
           "scheme": "example-test",
-          "project": "ExampleSwiftProject.xcodeproj"
+          "project": "swift/ExampleSwiftProject.xcodeproj"
         }
 
   check-vulnerabilities:

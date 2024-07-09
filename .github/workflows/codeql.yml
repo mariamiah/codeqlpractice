@@ -35,4 +35,3 @@ jobs:
             echo "Vulnerability score is acceptable: $score."
           fi
 
-

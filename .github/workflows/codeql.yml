@@ -15,9 +15,7 @@ jobs:
       project: |
         {
           "scheme": "Lotto24-staging",
-          "project": "Lotto24.xcodeproj",
-          "test_plan": "Default",
-          "alinghi_testenvironment": "app-test-apps"
+          "project": "Lotto24.xcodeproj"
         }
 
   check-vulnerabilities:

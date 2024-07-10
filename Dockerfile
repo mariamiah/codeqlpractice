@@ -28,9 +28,10 @@ RUN sdkmanager "platforms;android-30" "build-tools;30.0.3"
 
 # Copy Gradle wrapper and project files
 COPY . /mnt/volume/
-
-# Set working directory
 WORKDIR /mnt/volume/
+
+# Ensure the Gradle wrapper script is executable
+RUN chmod +x ./gradlew
 
 # Run Gradle build
 CMD ["./gradlew", "build"]

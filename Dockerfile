@@ -35,3 +35,4 @@ RUN chmod +x ./gradlew
 
 # Run Gradle build
 CMD ["./gradlew", "build"]
+

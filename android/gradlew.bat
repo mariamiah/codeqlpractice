@@ -63,3 +63,4 @@ set _SKIP=2
 set CLASSPATH=%APP_HOME%\gradle\wrapper\gradle-wrapper.jar
 
 set CMD_LINE_ARGS=%DEFAUL
+

@@ -12,8 +12,6 @@ DEFAULT_JVM_OPTS=""
 APP_NAME="Gradle"
 APP_BASE_NAME=$(basename "$0")
 
-# set -o posix
-
 # OS specific support (must be 'true' or 'false').
 cygwin=false
 msys=false
@@ -39,18 +37,20 @@ if [ -n "$JAVA_HOME" ] ; then
     JAVACMD="$JAVA_HOME/bin/java"
   fi
   if [ ! -x "$JAVACMD" ] ; then
-    die "ERROR: JAVA_HOME is set to an invalid directory: $JAVA_HOME
-
-Please set the JAVA_HOME variable in your environment to match the
-location of your Java installation."
+    echo "ERROR: JAVA_HOME is set to an invalid directory: $JAVA_HOME" >&2
+    echo "" >&2
+    echo "Please set the JAVA_HOME variable in your environment to match the" >&2
+    echo "location of your Java installation." >&2
+    exit 1
   fi
 else
   JAVACMD=$(which java)
   if [ -z "$JAVACMD" ] ; then
-    die "ERROR: JAVA_HOME is not set and no 'java' command could be found in your PATH.
-
-Please set the JAVA_HOME variable in your environment to match the
-location of your Java installation."
+    echo "ERROR: JAVA_HOME is not set and no 'java' command could be found in your PATH." >&2
+    echo "" >&2
+    echo "Please set the JAVA_HOME variable in your environment to match the" >&2
+    echo "location of your Java installation." >&2
+    exit 1
   fi
 fi
 
@@ -64,7 +64,7 @@ if [ "$cygwin" = "false" -a "$darwin" = "false" ] ; then
     fi
     ulimit -n $MAX_FD
     if [ $? -ne 0 ] ; then
-      warn "Could not set maximum file descriptor limit: $MAX_FD"
+      echo "Could not set maximum file descriptor limit: $MAX_FD" >&2
     fi
   fi
 fi
@@ -76,9 +76,8 @@ fi
 
 CLASSPATH=$APP_HOME/gradle/wrapper/gradle-wrapper.jar
 
-# Collect all arguments for the java command, following the pattern
-# [JVM options] [User-defined options] [Main class] [Program arguments]
-java_args="$DEFAULT_JVM_OPTS" "$GRADLE_OPTS" -classpath "$CLASSPATH" org.gradle.wrapper.GradleWrapperMain "$@"
+# Collect all arguments for the java command
+java_args="$DEFAULT_JVM_OPTS $GRADLE_OPTS -classpath $CLASSPATH org.gradle.wrapper.GradleWrapperMain $@"
 
 # Execute the java command
-exec "$JAVACMD" "${java_args[@]}"
+exec "$JAVACMD" $java_args

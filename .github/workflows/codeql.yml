@@ -13,7 +13,10 @@ jobs:
   codeql-analysis:
     uses: Kynetixx/codeql-module/.github/workflows/codeql-analysis.yml@main
     with:
-      languages: "typescript,swift,python"
+      languages: |
+        cpp
+        python
+        javascript
   check-vulnerabilities:
     needs: codeql-analysis
     runs-on: ubuntu-latest

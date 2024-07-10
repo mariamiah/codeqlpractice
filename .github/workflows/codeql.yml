@@ -15,6 +15,7 @@ jobs:
     with:
       languages: |
         java
+        kotlin
         python
         javascript
   check-vulnerabilities:

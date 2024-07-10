@@ -14,7 +14,7 @@ jobs:
     uses: Kynetixx/codeql-module/.github/workflows/codeql-analysis.yml@main
     with:
       languages: |
-        cpp
+        java
         python
         javascript
   check-vulnerabilities:

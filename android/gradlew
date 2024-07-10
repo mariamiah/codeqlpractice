@@ -78,7 +78,7 @@ CLASSPATH=$APP_HOME/gradle/wrapper/gradle-wrapper.jar
 
 # Collect all arguments for the java command, following the pattern
 # [JVM options] [User-defined options] [Main class] [Program arguments]
-java_args=("$DEFAULT_JVM_OPTS" "$GRADLE_OPTS" -classpath "$CLASSPATH" org.gradle.wrapper.GradleWrapperMain "$@")
+java_args="$DEFAULT_JVM_OPTS" "$GRADLE_OPTS" -classpath "$CLASSPATH" org.gradle.wrapper.GradleWrapperMain "$@"
 
 # Execute the java command
 exec "$JAVACMD" "${java_args[@]}"

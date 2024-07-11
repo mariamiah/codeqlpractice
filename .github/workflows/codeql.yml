@@ -18,6 +18,7 @@ jobs:
         kotlin
         python
         javascript
+      build-command: ./gradlew build
   check-vulnerabilities:
     needs: codeql-analysis
     runs-on: ubuntu-latest

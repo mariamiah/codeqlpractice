@@ -12,7 +12,7 @@ jobs:
     name: Create language build config
     runs-on: ubuntu-latest
     outputs:
-      build-config: ${{ steps.create-build-config.outputs.build_config }}
+      build-config: ${{ steps.create-build-config.outputs.BUILD_CONFIG }}
     permissions:
       actions: read
       contents: read
@@ -21,38 +21,22 @@ jobs:
       - id: create-build-config
         name: Create build config
         run: >
-          echo '${{ steps.transform-language-names.outputs.TRANSFORMED-LANGUAGES }}' |
+          echo "BUILD_CONFIG<<EOF" >> $GITHUB_OUTPUT
+          echo '${{ steps.set-output.outputs.TRANSFORMED-LANGUAGES }}' |
           jq 'map({"language": ., "build-mode": "auto"}) |
           map(if .language == "java-kotlin" 
           then ."build-mode" = "manual" | ."build-script" = "./gradlew --no-daemon -Dorg.gradle.jvmargs=-Xmx2g clean compileJava compileTestJava"
-          else . end)' > build-config.json
+          else . end)' >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
         shell: bash
-      - name: Upload build config
-        uses: actions/upload-artifact@v2
-        with:
-          name: build-config
-          path: build-config.json
-
 
   codeql:
     name: CodeQL
-    runs-on: ubuntu-latest
     needs: create-language-build-config
     permissions:
       actions: read
       contents: read
       security-events: write
-    steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
-
-    - name: Download build config
-      uses: actions/download-artifact@v2
-      with:
-        name: build-config
-        path: .
-  
-    - name: Use build config
-      uses: Kynetixx/codeql-module/.github/workflows/codeql-analysis.yml@main
-      with:
-        build-config: build-config.json
+    uses: Kynetixx/codeql-module/.github/workflows/codeql-analysis.yml@main
+    with:
+      build-config: ${{ needs.create-config.outputs.build-config }}

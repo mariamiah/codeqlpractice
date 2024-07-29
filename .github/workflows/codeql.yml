@@ -12,7 +12,7 @@ jobs:
     name: Create language build config
     runs-on: ubuntu-latest
     outputs:
-      build-config: ${{ steps.create-build-config.outputs.BUILD_CONFIG }}
+      build-config: ${{ steps.create-build-config.outputs.build_config }}
     permissions:
       actions: read
       contents: read
@@ -27,7 +27,7 @@ jobs:
             map(if .language == "java-kotlin" 
                 then .["build-mode"] = "manual" | .["build-script"] = "./gradlew --no-daemon -Dorg.gradle.jvmargs=-Xmx2g clean compileJava compileTestJava"
                 else .
-                end) | {"include": .}' | sed 's/"/\\"/g' >> $GITHUB_OUTPUT
+                end) >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
         shell: bash
 
@@ -40,4 +40,4 @@ jobs:
       security-events: write
     uses: Kynetixx/codeql-module/.github/workflows/codeql-analysis.yml@main
     with:
-      build-config: ${{ needs.create-build-config.outputs.build-config }}
+      build-config: ${{ fromJson(needs.create-language-build-config.outputs.build-config) }}

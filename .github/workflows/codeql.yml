@@ -1,20 +1,20 @@
-name: Call CodeQL Analysis
+# name: Call CodeQL Analysis
 
-on:
-  push:
-    branches:
-      - main
-      - master
-      - develop
-      - test/update
-  workflow_dispatch:
+# on:
+#   push:
+#     branches:
+#       - main
+#       - master
+#       - develop
+#       - test/update
+#   workflow_dispatch:
 
-jobs:
-  codeql-analysis:
-    uses: Kynetixx/codeql-module/.github/workflows/codeql-analysis.yml@main
-    with:
-      build-config: |
-        {\"include\":[{\"project\":\"foo\",\"config\":\"Debug\"},{\"project\":\"bar\",\"config\":\"Release\"}]}
+# jobs:
+#   codeql-analysis:
+#     uses: Kynetixx/codeql-module/.github/workflows/codeql-analysis.yml@main
+#     with:
+#       build-config: |
+#         {\"include\":[{\"project\":\"foo\",\"config\":\"Debug\"},{\"project\":\"bar\",\"config\":\"Release\"}]}
       # build-config: |
       #   '{"include": [
       #   {
@@ -23,3 +23,47 @@ jobs:
       #   }
       #   ]}'
 
+name: codeql workflow
+on:
+  push:
+    branches:
+      - main
+      - master
+      - develop
+      - test/update
+jobs:
+  create-language-build-config:
+    name: Create language build config
+    runs-on: [ self-hosted ]
+    outputs:
+      build-config: ${{ steps.create-build-config.outputs.BUILD-CONFIG }}
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+    steps:
+      - id: create-build-config
+        name: Create build config
+        run: >
+          echo "BUILD-CONFIG<<EOF">>$GITHUB_OUTPUT;
+          echo '["java-kotlin","javascript"]' |
+          jq 'map({"language": ., "build-mode": "auto"}) |
+          map(if .language == "java-kotlin" 
+          then ."build-mode" = "manual" | ."build-script" = "./gradlew --no-daemon -Dorg.gradle.jvmargs=-Xmx2g clean compileJava compileTestJava"
+          else . end)' >> $GITHUB_OUTPUT;
+          echo "EOF" >> $GITHUB_OUTPUT
+        shell: bash
+
+  codeql:
+    name: CodeQL
+    needs: create-language-build-config
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+    uses: Kynetixx/codeql-module/.github/workflows/codeql-analysis.yml@main
+    with:
+      build-config: ${{ toJSON(needs.create-language-build-config.outputs.build-config) }}
+      java-version: 17
+      java-distribution: temurin
+      node-version: 20

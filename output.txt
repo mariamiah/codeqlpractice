@@ -1,0 +1,17 @@
+BUILD-CONFIG<<EOF
+{
+  "include": [
+    {
+      "project": "foo",
+      "config": "Debug"
+    },
+    {
+      "project": "bar",
+      "config": "Release"
+    }
+  ]
+}
+EOF
+BUILD-CONFIG<<EOF
+{\"include\":[{\"project\":\"foo\",\"config\":\"Debug\"},{\"project\":\"bar\",\"config\":\"Release\"}]}
+EOF

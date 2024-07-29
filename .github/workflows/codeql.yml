@@ -27,7 +27,7 @@ jobs:
                 then .["build-mode"] = "manual" | .["build-script"] = "./gradlew --no-daemon -Dorg.gradle.jvmargs=-Xmx2g clean compileJava compileTestJava"
                 else .
                 end)' > build_config.json
-          echo "build_config=$(cat build_config.json)" >> $GITHUB_ENV
+          echo "build_config=$(cat build_config.json)" >> $GITHUB_OUTPUT
         shell: bash
 
   codeql:
@@ -39,5 +39,5 @@ jobs:
       security-events: write
     uses: Kynetixx/codeql-module/.github/workflows/codeql-analysis.yml@main
     with:
-      build-config: ${{ env.build_config }}
+      build-config: ${{ needs.create-language-build-config.outputs.build_config }}
 

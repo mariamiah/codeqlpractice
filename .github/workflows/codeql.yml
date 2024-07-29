@@ -1,28 +1,3 @@
-# name: Call CodeQL Analysis
-
-# on:
-#   push:
-#     branches:
-#       - main
-#       - master
-#       - develop
-#       - test/update
-#   workflow_dispatch:
-
-# jobs:
-#   codeql-analysis:
-#     uses: Kynetixx/codeql-module/.github/workflows/codeql-analysis.yml@main
-#     with:
-#       build-config: |
-#         {\"include\":[{\"project\":\"foo\",\"config\":\"Debug\"},{\"project\":\"bar\",\"config\":\"Release\"}]}
-      # build-config: |
-      #   '{"include": [
-      #   {
-      #   "language": "javascript-typescript",
-      #   "build-mode": "auto"
-      #   }
-      #   ]}'
-
 name: codeql workflow
 on:
   push:
@@ -31,12 +6,13 @@ on:
       - master
       - develop
       - test/update
+
 jobs:
   create-language-build-config:
     name: Create language build config
-    runs-on: [ ubuntu-latest ]
+    runs-on: ubuntu-latest
     outputs:
-      build-config: ${{ steps.create-build-config.outputs.BUILD-CONFIG }}
+      build-config: ${{ steps.create-build-config.outputs.BUILD_CONFIG }}
     permissions:
       actions: read
       contents: read
@@ -44,13 +20,14 @@ jobs:
     steps:
       - id: create-build-config
         name: Create build config
-        run: >
-          echo "BUILD-CONFIG<<EOF">>$GITHUB_OUTPUT;
-          echo '["java-kotlin","javascript"]' |
-          jq 'map({"language": ., "build-mode": "auto"}) |
-          map(if .language == "java-kotlin" 
-          then ."build-mode" = "manual" | ."build-script" = "./gradlew --no-daemon -Dorg.gradle.jvmargs=-Xmx2g clean compileJava compileTestJava"
-          else . end)'| {"include": .}' | sed 's/"/\\"/g' >> $GITHUB_OUTPUT;
+        run: |
+          echo "BUILD_CONFIG<<EOF" >> $GITHUB_OUTPUT
+          echo '["java-kotlin","javascript"]' | jq -c '
+            map({"language": ., "build-mode": "auto"}) |
+            map(if .language == "java-kotlin" 
+                then .["build-mode"] = "manual" | .["build-script"] = "./gradlew --no-daemon -Dorg.gradle.jvmargs=-Xmx2g clean compileJava compileTestJava"
+                else .
+                end) | {"include": .}' | sed 's/"/\\"/g' >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
         shell: bash
 
@@ -63,4 +40,4 @@ jobs:
       security-events: write
     uses: Kynetixx/codeql-module/.github/workflows/codeql-analysis.yml@main
     with:
-      build-config: ${{ toJSON(needs.create-language-build-config.outputs.build-config) }}
+      build-config: ${{ steps.create-build-config.outputs.build-config }}

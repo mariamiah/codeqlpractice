@@ -39,5 +39,5 @@ jobs:
       security-events: write
     uses: Kynetixx/codeql-module/.github/workflows/codeql-analysis.yml@main
     with:
-      build-config: ${{ needs.create-language-build-config.outputs.build_config }}
+      build-config: ${{ needs.create-language-build-config.outputs.build-config }}
 

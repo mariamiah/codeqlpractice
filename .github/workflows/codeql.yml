@@ -34,7 +34,7 @@ on:
 jobs:
   create-language-build-config:
     name: Create language build config
-    runs-on: [ self-hosted ]
+    runs-on: [ ubuntu-latest ]
     outputs:
       build-config: ${{ steps.create-build-config.outputs.BUILD-CONFIG }}
     permissions:

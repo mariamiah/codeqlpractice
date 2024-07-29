@@ -1,0 +1,9 @@
+{
+    "include": [
+        {
+            "language": "javascript-typescript",
+            "build-mode": "manual",
+            "build-script": "sh ./test.sh"
+        }
+    ]
+}

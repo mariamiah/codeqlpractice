@@ -1,9 +1,11 @@
-{
-    "include": [
-        {
-            "language": "javascript-typescript",
-            "build-mode": "manual",
-            "build-script": "sh ./test.sh"
-        }
-    ]
-}
+[
+    {
+      "language": "java-kotlin",
+      "build-mode": "manual",
+      "build-script": "./gradlew --no-daemon -Dorg.gradle.jvmargs=-Xmx2g clean compileJava compileTestJava"
+    },
+    {
+      "language": "javascript",
+      "build-mode": "auto"
+    }
+  ]

@@ -22,12 +22,13 @@ jobs:
         name: Create build config
         run: |
           mkdir -p .github/codeql
-              echo '["java-kotlin","javascript"]' | jq -c '
-                map({"language": ., "build-mode": "auto"}) |
-                map(if .language == "java-kotlin" 
-                    then .["build-mode"] = "manual" | .["build-script"] = "./gradlew --no-daemon -Dorg.gradle.jvmargs=-Xmx2g clean compileJava compileTestJava"
-                    else .
-                    end)' > .github/codeql/build-config.json
+          echo '["java-kotlin","javascript"]' | jq -c '
+            map({"language": ., "build-mode": "auto"}) |
+            map(if .language == "java-kotlin" 
+                then .["build-mode"] = "manual" | .["build-script"] = "./gradlew --no-daemon -Dorg.gradle.jvmargs=-Xmx2g clean compileJava compileTestJava"
+                else .
+                end)' > .github/codeql/build-config.json
+          ls -la
         shell: bash
 
   codeql:

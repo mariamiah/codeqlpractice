@@ -50,7 +50,7 @@ jobs:
           jq 'map({"language": ., "build-mode": "auto"}) |
           map(if .language == "java-kotlin" 
           then ."build-mode" = "manual" | ."build-script" = "./gradlew --no-daemon -Dorg.gradle.jvmargs=-Xmx2g clean compileJava compileTestJava"
-          else . end)' >> $GITHUB_OUTPUT;
+          else . end) {"include": .}' | sed 's/"/\\"/g' >> $GITHUB_OUTPUT;
           echo "EOF" >> $GITHUB_OUTPUT
         shell: bash
 

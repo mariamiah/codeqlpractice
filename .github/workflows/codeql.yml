@@ -40,4 +40,3 @@ jobs:
     uses: Kynetixx/codeql-module/.github/workflows/codeql-analysis.yml@main
     with:
       build-config: ${{ needs.create-language-build-config.outputs.build-config }}
-      

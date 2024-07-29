@@ -21,14 +21,13 @@ jobs:
       - id: create-build-config
         name: Create build config
         run: |
-          echo "BUILD_CONFIG<<EOF" >> $GITHUB_OUTPUT
           echo '["java-kotlin","javascript"]' | jq -c '
             map({"language": ., "build-mode": "auto"}) |
             map(if .language == "java-kotlin" 
                 then .["build-mode"] = "manual" | .["build-script"] = "./gradlew --no-daemon -Dorg.gradle.jvmargs=-Xmx2g clean compileJava compileTestJava"
                 else .
-                end)' >> $GITHUB_OUTPUT
-          echo "EOF" >> $GITHUB_OUTPUT
+                end)' > build_config.json
+          echo "build_config=$(cat build_config.json)" >> $GITHUB_ENV
         shell: bash
 
   codeql:
@@ -40,5 +39,5 @@ jobs:
       security-events: write
     uses: Kynetixx/codeql-module/.github/workflows/codeql-analysis.yml@main
     with:
-      build-config: ${{ fromJson(needs.create-language-build-config.outputs.build-config) }}
+      build-config: ${{ env.build_config }}
 

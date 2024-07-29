@@ -13,10 +13,12 @@ jobs:
   codeql-analysis:
     uses: Kynetixx/codeql-module/.github/workflows/codeql-analysis.yml@main
     with:
-      build-config: |
-        '{"include": [
-        {
-        "language": "javascript-typescript",
-        "build-mode": "auto"
-        }
-        ]}'
+      build-config: {\"include\":[{\"project\":\"foo\",\"config\":\"Debug\"},{\"project\":\"bar\",\"config\":\"Release\"}]}
+      # build-config: |
+      #   '{"include": [
+      #   {
+      #   "language": "javascript-typescript",
+      #   "build-mode": "auto"
+      #   }
+      #   ]}'
+

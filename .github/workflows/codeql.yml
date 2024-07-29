@@ -28,7 +28,7 @@ jobs:
                     then .["build-mode"] = "manual" | .["build-script"] = "./gradlew --no-daemon -Dorg.gradle.jvmargs=-Xmx2g clean compileJava compileTestJava"
                     else .
                     end)' > .github/codeql/build-config.json
-            shell: bash
+        shell: bash
 
   codeql:
     name: CodeQL

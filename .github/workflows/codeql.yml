@@ -20,13 +20,15 @@ jobs:
     steps:
       - id: create-build-config
         name: Create build config
-        run: >
+        run: |
+          mkdir -p .github/codeql
           echo "BUILD_CONFIG<<EOF" >> $GITHUB_OUTPUT
-          echo '${{ steps.set-output.outputs.TRANSFORMED-LANGUAGES }}' |
-          jq 'map({"language": ., "build-mode": "auto"}) |
-          map(if .language == "java-kotlin" 
-          then ."build-mode" = "manual" | ."build-script" = "./gradlew --no-daemon -Dorg.gradle.jvmargs=-Xmx2g clean compileJava compileTestJava"
-          else . end)' >> $GITHUB_OUTPUT
+          echo '["java-kotlin","javascript"]' | jq -c '
+            map({"language": ., "build-mode": "auto"}) |
+            map(if .language == "java-kotlin" 
+                then .["build-mode"] = "manual" | .["build-script"] = "./gradlew --no-daemon -Dorg.gradle.jvmargs=-Xmx2g clean compileJava compileTestJava"
+                else .
+                end)' >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
         shell: bash
 

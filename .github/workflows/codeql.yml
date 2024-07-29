@@ -21,7 +21,6 @@ jobs:
       - id: create-build-config
         name: Create build config
         run: |
-          mkdir -p .github/codeql
           echo "BUILD_CONFIG<<EOF" >> $GITHUB_OUTPUT
           echo '["java-kotlin","javascript"]' | jq -c '
             map({"language": ., "build-mode": "auto"}) |
@@ -41,4 +40,4 @@ jobs:
       security-events: write
     uses: Kynetixx/codeql-module/.github/workflows/codeql-analysis.yml@main
     with:
-      build-config: ${{ needs.create-config.outputs.build-config }}
+      build-config: ${{ needs.create-language-build-config.outputs.build-config }}

@@ -21,15 +21,14 @@ jobs:
       - id: create-build-config
         name: Create build config
         run: |
-          echo "BUILD_CONFIG<<EOF" >> $GITHUB_OUTPUT
-          echo '["java-kotlin","javascript"]' | jq -c '
-            map({"language": ., "build-mode": "auto"}) |
-            map(if .language == "java-kotlin" 
-                then .["build-mode"] = "manual" | .["build-script"] = "./gradlew --no-daemon -Dorg.gradle.jvmargs=-Xmx2g clean compileJava compileTestJava"
-                else .
-                end)' >> $GITHUB_OUTPUT
-          echo "EOF" >> $GITHUB_OUTPUT
-        shell: bash
+          mkdir -p .github/codeql
+              echo '["java-kotlin","javascript"]' | jq -c '
+                map({"language": ., "build-mode": "auto"}) |
+                map(if .language == "java-kotlin" 
+                    then .["build-mode"] = "manual" | .["build-script"] = "./gradlew --no-daemon -Dorg.gradle.jvmargs=-Xmx2g clean compileJava compileTestJava"
+                    else .
+                    end)' > .github/codeql/build-config.json
+            shell: bash
 
   codeql:
     name: CodeQL
@@ -41,4 +40,3 @@ jobs:
     uses: Kynetixx/codeql-module/.github/workflows/codeql-analysis.yml@main
     with:
       build-config: .github/codeql/build-config.json
-

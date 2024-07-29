@@ -18,7 +18,5 @@ jobs:
         {
         "language": "javascript-typescript",
         "build-mode": "auto"
-      
         }
-      
         ]'
